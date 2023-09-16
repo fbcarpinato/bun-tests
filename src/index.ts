@@ -1,10 +1,14 @@
 import express from 'express';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 const app = express();
 
-app.get('/', (request: express.Request, response: express.Response) => {
+app.get('/', async (request: express.Request, response: express.Response) => {
+    const usersCount = await prisma.user.count();
     response.json({
-        data: "Hello World 1"
+        data: {users: usersCount}
     })
 })
 
