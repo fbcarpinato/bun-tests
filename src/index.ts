@@ -8,11 +8,21 @@ const prisma = new PrismaClient()
 
 const app = express()
 
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, '../data/access.log'),
-  { flags: 'a' }
+app.use(
+  morgan('dev', {
+    skip: function (req, res) {
+      return res.statusCode < 400
+    }
+  })
 )
-app.use(morgan('combined', { stream: accessLogStream }))
+
+app.use(
+  morgan('combined', {
+    stream: fs.createWriteStream(path.join(__dirname, '../data/access.log'), {
+      flags: 'a'
+    })
+  })
+)
 
 app.get('/', async (request: express.Request, response: express.Response) => {
   const usersCount = await prisma.user.count()
