@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import fs from 'fs'
 import path from 'path'
 import cors from 'cors'
+import compression from 'compression'
 
 const prisma = new PrismaClient()
 
@@ -26,6 +27,8 @@ app.use(
 )
 
 app.use(cors())
+
+app.use(compression())
 
 app.get('/', async (request: express.Request, response: express.Response) => {
   const usersCount = await prisma.user.count()
