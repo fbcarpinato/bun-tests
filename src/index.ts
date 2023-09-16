@@ -5,6 +5,7 @@ import fs from 'fs'
 import path from 'path'
 import cors from 'cors'
 import compression from 'compression'
+import helmet from 'helmet'
 
 const prisma = new PrismaClient()
 
@@ -29,6 +30,8 @@ app.use(
 app.use(cors())
 
 app.use(compression())
+
+app.use(helmet())
 
 app.get('/', async (request: express.Request, response: express.Response) => {
   const usersCount = await prisma.user.count()
